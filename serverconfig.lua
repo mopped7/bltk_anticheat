@@ -4,7 +4,7 @@ ServerConfig = {} -- [[Version: V1]]
 
 -- BYPASS ACE: bltk-ac.bypass
 
-ServerConfig.DebugMode = true -- Debug Mode, prevent players from getting banned and kicked, only use it for troubleshooting and other testing stuff. This function will also disable bypass, to let admins to troubleshoot the Anticheat.
+ServerConfig.DebugMode = false -- Debug Mode, prevent players from getting banned and kicked, only use it for troubleshooting and other testing stuff. This function will also disable bypass, to let admins to troubleshoot the Anticheat.
 ServerConfig.KickMessage = "Default config" -- Change this
 
 ServerConfig.UsernameBlacklist = true
