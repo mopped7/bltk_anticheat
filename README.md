@@ -24,6 +24,10 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 - Night Vision detection
 - Anti Ragdoll detection
 - Anti MenyooASI
+- Anti Freecam
+- Armor check
+- Anti Tiny ped
+- Ped blacklist
 
 **Client-side Inject detections**
 - Resource Lookup
@@ -47,6 +51,7 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 - Anti Chat Spam
 - Anti Blacklisted World
 - Blacklisted Events
+- Argument protected events
 
 ## Updates? Contributing?
 
