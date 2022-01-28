@@ -67,8 +67,18 @@ if ClientConfig.MenuChecks then
             end
             if ClientConfig.NoNPC then
                 for ped in EnumeratePeds() do
-                    SetEntityAsMissionEntity(ped, false, false)
-                    DeleteEntity(ped)
+                    if not (IsPedAPlayer(ped)) then
+                        if not IsEntityAMissionEntity(ped) then
+                            SetEntityAsMissionEntity(ped, false, false)
+                            DeleteEntity(ped)
+                        end
+                    end
+                end
+            end
+            if ClientConfig.AntiFreeCam then
+                local x, y, z = table.unpack(GetEntityCoords(PlayerPedId()) - GetFinalRenderedCamCoord())
+                if (x > ClientConfig.FreecamLimit) or (y > ClientConfig.FreecamLimit) or (z > ClientConfig.FreecamLimit) or (x < -ClientConfig.FreecamLimit) or (y < -ClientConfig.FreecamLimit) or (z < -ClientConfig.FreecamLimit) then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck Freecam", "This player tried to use Freecam.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
                 end
             end
             if ClientConfig.ThermalVision then
@@ -77,6 +87,18 @@ if ClientConfig.MenuChecks then
                     
                     else
                     TriggerServerEvent("bltkac_detection", "MenuCheck Visions", "ThermalVision detected.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                    end
+                end
+            end
+            if ClientConfig.MaxArmor then
+                if GetPedArmour(PlayerPedId()) > ClientConfig.MaxArmor then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck Armor", "This player tried to exceed the armor limit.\n**Player armor:** `"..GetPedArmour(PlayerPedId()).."`\n**Max Armor:** `"..ClientConfig.MaxArmor.."`", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+            end
+            if ClientConfig.UserPedCheckMS then
+                for n, ATMPedModel in pairs(ClientConfig.UserPedChecks) do
+                    if IsPedModel(GetPlayerPed(-1), ATMPedModel) then
+                        TriggerServerEvent("bltkac_detection", "MenuCheck Ped Check", "This player tried to use a blacklisted ped.\n**Ped:** `"..ATMPedModel.."`\n**Ped hash:** `"..GetHashKey(ATMPedModel).."`", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
                     end
                 end
             end
@@ -199,3 +221,15 @@ if ClientConfig.DisableNUIDevtools then
         TriggerServerEvent("bltkac_detection", "Nui DevTools Detect", "This player tried to use nui_devtools.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
      end)
 end
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000)
+        if ClientConfig.PedChecks then
+            local PedFlag = GetPedConfigFlag(PlayerPedId(), 223, true)
+
+            if PedFlag then
+                TriggerServerEvent("bltkac_detection", "Tiny Ped", "This player tried to use a Tiny ped config flag.", ClientConfig.PedKick, ClientConfig.PedBan)
+            end
+        end
+    end
+end)

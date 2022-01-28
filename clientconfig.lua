@@ -1,4 +1,4 @@
-ClientConfig = {} -- [[Version: V1]]
+ClientConfig = {} -- [[Version: V2]]
 -- [[READ THIS!]]
 -- [[Always configure your anticheat properly, a bad configuration can cause false positives, and ban innocent players.]]
 
@@ -16,12 +16,15 @@ ClientConfig.MenuChecks = true -- Menucheck system
                     "WEAPON_FIREWORK",
                     "WEAPON_APPISTOL"    
                 }
-            ClientConfig.NoNPC = true -- Turn this on, if you have a NoNPC server. This function will delete ALL peds.
+            ClientConfig.NoNPC = true -- Turn this on, if you have a NoNPC server. This function will delete ALL UNKNOWN ped.
             ClientConfig.TxdMenu = false -- This will detect some textured mod menu.
             ClientConfig.ThermalVision = true -- This will detect thermal vision if the player is not in any helicopter.
             ClientConfig.NightVision = true -- This will detect night vision.
             ClientConfig.RagdollDetection = true -- Detecting Anti-Ragdoll systems.
             ClientConfig.MenyooASI = false -- It can detect some ASI menu like Menyoo, be careful with this function, this function can cause false positives on some servers.
+            ClientConfig.AntiFreeCam = true -- Anti Freecam system, that can be useful against entity spawner scripts.
+                ClientConfig.FreecamLimit = 100 -- Freecam distance limit, 100 is a good starting point, but if you get false bans with this, you should increase this number
+            ClientConfig.MaxArmor = 20 -- Max armor (usually 100)
 
 ClientConfig.InjectDetect = true -- Client-side anti injector system
     ClientConfig.ClientResourceStuff = true -- If you enabled one of these functions under the ClientResourceStuff section, then don't restart, stop, or start client sided scripts.
@@ -33,3 +36,14 @@ ClientConfig.InjectDetect = true -- Client-side anti injector system
             ClientConfig.AntiResourceRestart = true -- (Really useful) Can detect some executors. DON'T STOP RESTART OR START SCRIPTS IF YOU ENABLED THIS.
             ClientConfig.NUICheck = true -- Effective detection
             ClientConfig.DisableNUIDevtools = true -- This function will disable nui_devtools.
+
+ClientConfig.PedChecks = true -- This will check ped manipulations.
+    ClientConfig.PedKick = true
+    ClientConfig.PedBan = true
+        ClientConfig.AntiTinyPed = true -- This script will check Tiny pedconfig flags.
+        ClientConfig.UserPedCheckMS = true -- Master switch for the blacklisted ped system.
+            ClientConfig.UserPedChecks = { -- This is a blacklisted ped system.
+                "g_m_m_chemwork_01",
+                "s_m_y_swat_01",
+                "u_m_y_zombie_01",
+            } 

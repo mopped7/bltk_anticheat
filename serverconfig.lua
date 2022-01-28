@@ -1,10 +1,10 @@
-ServerConfig = {} -- [[Version: V1]]
+ServerConfig = {} -- [[Version: V2]]
 -- [[READ THIS!]]
 -- [[Always configure your anticheat properly, a bad configuration can cause false positives, and ban innocent players. Turn off what you don't need, turn on what you need, and fill the tables properly.]]
 
 -- BYPASS ACE: bltk-ac.bypass
 
-ServerConfig.DebugMode = false -- Debug Mode, prevent players from getting banned and kicked, only use it for troubleshooting and other testing stuff. This function will also disable bypass, to let admins to troubleshoot the Anticheat.
+ServerConfig.DebugMode = true -- Debug Mode, prevent players from getting banned and kicked, only use it for troubleshooting and other testing stuff. This function will also disable bypass, to let admins to troubleshoot the Anticheat.
 ServerConfig.KickMessage = "Default config" -- Change this
 
 ServerConfig.UsernameBlacklist = true
@@ -90,9 +90,9 @@ ServerConfig.AntiExplosionNuke = true -- Anti explosion nuke system, this will d
 
 ServerConfig.ChatController = true -- Chat control system
     ServerConfig.ChatAntiSpam = true -- Anti chat spam
-        ServerConfig.MaxMessageSpam = 5 -- Max messages / 5 sec
+        ServerConfig.MaxMessageSpam = 3 -- Max messages / 5 sec
         ServerConfig.ChatAntiSpamKick = true
-        ServerConfig.ChatAntiSpamBan = true
+        ServerConfig.ChatAntiSpamBan = false
     ServerConfig.ChatBlacklistedWord = true -- Word blacklist system, this can be useful.
         ServerConfig.BlacklistedWords = {
             "Desudo",
@@ -144,3 +144,14 @@ ServerConfig.BlacklistedEventsSystem = true -- This is a really good tool agains
         "FAC:EzExec",
     }
 
+ServerConfig.MaxValuedEvents = { -- This can catch money spamming, on a vulnarable event, and can easily catch other event executions like that. Maxvalue means, if a player triggers this event, with an argument which is higer then maxvalue, the anticheat will block it.
+    ["esx_garbagejob:pay"] = {maxvalue=1000},
+    ["esx_pizza:pay"] = {maxvalue=1000},
+    ["esx_ranger:pay"] = {maxvalue=1000},
+    ["esx_truckerjob:pay"] = {maxvalue=1000},
+    ["esx_slotmachine:sv:2"] = {maxvalue=1000},
+    ["AdminMenu:giveBank"] = {maxvalue=1000},
+    ["AdminMenu:giveCash"] = {maxvalue=1000},
+    ["LegacyFuel:PayFuel"] = {maxvalue=1000},
+    ["esx_society:billing"] = {maxvalue=100000},
+}

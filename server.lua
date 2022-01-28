@@ -131,9 +131,9 @@ Citizen.CreateThread(function()
 end)
 
 -- Args checker
-function BLTKACARGCHECK (basevar, cargs)
+function BLTKACARGCHECK (basevar, maxvalue)
     for n, k in ipairs(basevar) do
-        if k == cargs then
+        if k > maxvalue then
             return true
         end
     end
@@ -342,4 +342,21 @@ if ServerConfig.AntiEntityNuke then
             end
         end
     end) 
+end
+
+for i, v in pairs(ServerConfig.MaxValuedEvents) do
+    local svevent = i
+    local maxvalue = ServerConfig.MaxValuedEvents[i].maxvalue
+    RegisterServerEvent(svevent)
+    AddEventHandler(svevent, function(args1, args2, args3, args4)
+        if args1 ~= nil and args1 > maxvalue then
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+        elseif args2 ~= nil and args2 > maxvalue then
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+        elseif args3 ~= nil and args3 > maxvalue then
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+        elseif args4 ~= nil and args4 > maxvalue then
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3, args4.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+        end
+    end)
 end
