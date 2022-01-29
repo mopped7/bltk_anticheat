@@ -350,13 +350,13 @@ for i, v in pairs(ServerConfig.MaxValuedEvents) do
     RegisterServerEvent(svevent)
     AddEventHandler(svevent, function(args1, args2, args3, args4)
         if args1 ~= nil and args1 > maxvalue then
-            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1.."]`", ServerConfig.EventProtectionKick, ServerConfig.EventProtectionBan)
         elseif args2 ~= nil and args2 > maxvalue then
-            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2.."]`", ServerConfig.EventProtectionKick, ServerConfig.EventProtectionBan)
         elseif args3 ~= nil and args3 > maxvalue then
-            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3.."]`", ServerConfig.EventProtectionKick, ServerConfig.EventProtectionBan)
         elseif args4 ~= nil and args4 > maxvalue then
-            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3, args4.."]`", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
+            BLTKACDETECT(source, "Event executed", "This player executed `"..svevent.."` with a >"..maxvalue.." value `["..args1, args2, args3, args4.."]`", ServerConfig.EventProtectionKick, ServerConfig.EventProtectionBan)
         end
     end)
 end

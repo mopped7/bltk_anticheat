@@ -24,7 +24,7 @@ ClientConfig.MenuChecks = true -- Menucheck system
             ClientConfig.MenyooASI = false -- It can detect some ASI menu like Menyoo, be careful with this function, this function can cause false positives on some servers.
             ClientConfig.AntiFreeCam = true -- Anti Freecam system, that can be useful against entity spawner scripts.
                 ClientConfig.FreecamLimit = 100 -- Freecam distance limit, 100 is a good starting point, but if you get false bans with this, you should increase this number
-            ClientConfig.MaxArmor = 100 -- Max armor (usually 100)
+            ClientConfig.MaxArmor = 20 -- Max armor (usually 100)
 
 ClientConfig.InjectDetect = true -- Client-side anti injector system
     ClientConfig.ClientResourceStuff = true -- If you enabled one of these functions under the ClientResourceStuff section, then don't restart, stop, or start client sided scripts.
