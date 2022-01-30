@@ -49,7 +49,7 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 - Anti ParticleFX
 - Anti Explosion Nuke
 - Anti Chat Spam
-- Anti Blacklisted World
+- Anti Blacklisted Word
 - Blacklisted Events
 - Argument protected events
 
