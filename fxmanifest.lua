@@ -18,3 +18,9 @@ server_script {
     'webhookconfig.lua',
     'server.lua',
 }
+
+ui_page 'html/index.html'
+
+files {
+	'html/index.html'
+}

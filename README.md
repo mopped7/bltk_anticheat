@@ -10,9 +10,15 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 
 
 
+## Configuration?
+
+Always be careful when you are configuring this anticheat. You will need to find out which functions are working correctly on your server. A good configuration can make difference.
+**Bypass ACE permission: bltk-ac.bypass**
+
+
 ## Functions
 
-**Client-side Menucheck cycle functions**
+**Client-side AC features**
 - Anti God Mode
 - Max health system
 - Anti Semi God Mode
@@ -28,19 +34,22 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 - Armor check
 - Anti Tiny ped
 - Ped blacklist
-
-**Client-side Inject detections**
 - Resource Lookup
 - Command Checker
 - Resource Checker
 - Anti Resource Restart
 - NUICheck
 - Anti NUI-Devtools
+- Anti Invisible
+- Anti SpeedHack
+- Anti Explosive Bullets
+- Anti Noclip
+- Anti Weapon Damage Changer
 
 **Server-side dev functions**
 - Debug Mode
 
-**Server-side AC functions**
+**Server-side AC features**
 - Anti PCK Menu
 - Anti Scrambler Script
 - Anti Weapon remove
@@ -52,6 +61,9 @@ This anticheat can easily catch cheaters, I made a lot of function, to detect ch
 - Anti Blacklisted Word
 - Blacklisted Events
 - Argument protected events
+- Anti Negative Events
+- Object/Vehicle/Ped blacklist
+
 
 ## Updates? Contributing?
 

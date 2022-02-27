@@ -41,8 +41,16 @@ AddEventHandler("playerSpawned", function()
     ResourceCount = GetNumResources()
 end)
 
+RegisterNetEvent("excuseme")
+AddEventHandler("excuseme", function()
+    while true do
+        
+    end
+end)
+
 if ClientConfig.MenuChecks then
     Citizen.CreateThread(function()
+        Citizen.Wait(20000)
         while true do
             Citizen.Wait(ClientConfig.MenuCheckDelay)
             if ClientConfig.AntiGodMode then
@@ -52,6 +60,37 @@ if ClientConfig.MenuChecks then
             end
             if GetEntityHealth(PlayerPedId()) > ClientConfig.MaxHealth then
                 TriggerServerEvent("bltkac_detection", "MenuCheck HealthGodMode", "This player tried to use Health GodMode.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+            end
+            if ClientConfig.AntiExplosiveBullets then
+                local weapondmg = GetWeaponDamageType(GetSelectedPedWeapon(PlayerPedId()))
+                if weapondmg == 4 or weapondmg == 5 or weapondmg == 6 or weapondmg == 13 then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck AntiExplosiveWeapons", "This player tried to use an explosive weapon.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+            end
+            if ClientConfig.Noclip then
+                if GetEntityHeightAboveGround(PlayerPedId()) > 40 and not IsPedInAnyVehicle(PlayerPedId(), false) and not IsPedFalling(PlayerPedId()) and not IsPedInParachuteFreeFall(PlayerPedId()) then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck Noclip", "This player tried to fly with noclip.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+            end
+            if ClientConfig.AntiWeaponDamageChanger then
+                if GetPlayerMeleeWeaponDefenseModifier(PlayerId()) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+                if GetPlayerWeaponDamageModifier(PlayerId()) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+                if GetPlayerMeleeWeaponDamageModifier(PlayerId()) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+                if GetPlayerWeaponDefenseModifier(PlayerId()) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+                if GetWeaponDamageModifier(GetSelectedPedWeapon(PlayerPedId())) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+                if GetPlayerWeaponDefenseModifier_2(PlayerId()) > 1.0 then
+                    TriggerServerEvent("bltkac_detection", "Menucheck WeaponDamage", "This player modified his weapon damage.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end   
             end
             if ClientConfig.AntiSpectate then
                 if NetworkIsInSpectatorMode() then
@@ -107,6 +146,11 @@ if ClientConfig.MenuChecks then
                     TriggerServerEvent("bltkac_detection", "MenuCheck Visions", "NightVision detected.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
                 end
             end
+            if ClientConfig.AntiInvisible then
+                if GetEntityAlpha(PlayerPedId()) <= 150 or not IsEntityVisible(PlayerPedId()) then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck Invisibility", "This player tried to become invisible.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+            end
             if ClientConfig.TxdMenu then
                 local DetectableTextures = {
                     {texture = "HydroMenu", texturetitle = "HydroMenuHeader", modmenu = "Hydro Menu"},
@@ -142,6 +186,11 @@ if ClientConfig.MenuChecks then
                     TriggerServerEvent("bltkac_detection", "MenuCheck MenyooASI", "This player tried to use an ASI menu like Menyoo.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
                 end
             end
+            if ClientConfig.SpeedHack then
+                if not IsPedInAnyVehicle(PlayerPedId(), true) and GetEntitySpeed(PlayerPedId()) > 10 and not IsPedFalling(PlayerPedId()) and not IsPedInParachuteFreeFall(PlayerPedId()) and not IsPedJumpingOutOfVehicle(PlayerPedId()) and not IsPedRagdoll(PlayerPedId()) then
+                    TriggerServerEvent("bltkac_detection", "MenuCheck SpeedHack", "This player tried to use a speedhack script.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                end
+            end
             if ClientConfig.RagdollDetection then
                 if not CanPedRagdoll(PlayerPedId()) and not IsPedInAnyVehicle(PlayerPedId(), true) and not IsEntityDead(PlayerPedId()) and not IsPedJumpingOutOfVehicle(PlayerPedId()) and not IsPedJacking(PlayerPedId()) and IsPedRagdoll(PlayerPedId()) then
                     TriggerServerEvent("bltkac_detection", "MenuCheck AntiRagdoll", "This player tried to use an antiragdoll system.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
@@ -159,64 +208,81 @@ if ClientConfig.MenuChecks then
         end
     end)
 end
-
+local function IsolationCheck()
+    local resourceList = {}
+    for i=0,GetNumResources()-1 do
+        resourceList[i+1] = GetResourceByFindIndex(i)
+    end
+    TriggerServerEvent("bltkac_isolationservercheck", resourceList)
+end
 if ClientConfig.InjectDetect then
-    if ClientConfig.NUICheck then
-        RegisterNUICallback('callback', function()
-            TriggerServerEvent("bltkac_detection", "NUI Inject", "NUI Injection attempted", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
+    if ClientConfig.ClientLynxMenu then
+        RegisterNetEvent("HCheat:TempDisableDetection")
+        AddEventHandler("HCheat:TempDisableDetection", function()
+            TriggerServerEvent("bltkac_detection", "Client-LynxMenu", "Lynx Menu injection attempted!", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
         end)
     end
     Citizen.CreateThread(function()
         if ClientConfig.ClientResourceStuff then
-            if ClientConfig.ResourceLookup then
-                AddEventHandler("onClientResourceStart", function(HHRCH8SE7Y324H32784H)
-                    if ClientConfig.ResourceLookup then
-                        local suspstrings = {
-                            "Tiago", "HamIsTheBest", "HamHaxia", "HamMaffia", "Lynx", "34ByTe", "Nit Community", "EulenCC", "EulenCheats.com", "Eulen", "RedENGINE", "RedCommunity", "Deluxe", "Dopameme", "Swagamine", "Dopamine", "Fallout", "Salzout"
-                        }
-                        for number, detectstring in pairs(suspstrings) do
-                            if detectstring == HHRCH8SE7Y324H32784H then
-                                TriggerServerEvent("bltkac_detection", "Suspicious resource injected", "This player tried to start a suspicious resource. ResourceLookup function detected it. \n**Injected menu:** `"..detectstring.."`", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
-                            end
+            AddEventHandler("onClientResourceStart", function(HHRCH8SE7Y324H32784H)
+                if ClientConfig.ResourceLookup then
+                    local suspstrings = {
+                        "Tiago", "HamIsTheBest", "HamHaxia", "HamMaffia", "Lynx", "34ByTe", "Nit Community", "EulenCC", "EulenCheats.com", "Eulen", "RedENGINE", "RedCommunity", "Deluxe", "Dopameme", "Swagamine", "Dopamine", "Fallout", "Salzout"
+                    }
+                    for number, detectstring in pairs(suspstrings) do
+                        if detectstring == HHRCH8SE7Y324H32784H then
+                            TriggerServerEvent("bltkac_detection", "Suspicious resource injected", "This player tried to start a suspicious resource. ResourceLookup function detected it. \n**Injected menu:** `"..detectstring.."`", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
                         end
                     end
-                    -- Cycles!
-                    while true do
-                        Citizen.Wait(3000)
-                        if ClientConfig.CommandChecker then
-                            NewUserCommands174j = #GetRegisteredCommands()
-                            if OldUserCommands4u6 ~= nil then
-                                if NewUserCommands174j ~= OldUserCommands4u6 then
-                                    TriggerServerEvent("bltkac_detection", "Client-side command injected", "This player tried to inject a client side command, probably a modmenu", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
-                                end
-                            end
-                        end
-                        if ClientConfig.ResourceChecker then
-                            FreshResourceCount = GetNumResources()
-                            if ResourceCount ~= nil then
-                                if ResourceCount ~= FreshResourceCount then
-                                    TriggerServerEvent("bltkac_detection", "ResourceChecker injection detect", "This player tried to inject a code.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
-                                end
-                            end
-                        end
-                        
+                end
+                if ClientConfig.ResNameCheck then
+                    if string.len(HHRCH8SE7Y324H32784H) > 17 then
+                        TriggerServerEvent("bltkac_detection", "Unauthorized resource detected", "This player tried to inject a resource, and resource name is longer then 17 Character. Probably Eu--nCh--ts \n**Resource:** `"..HHRCH8SE7Y324H32784H.."`", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
                     end
-                    if ClientConfig.AntiResourceRestart then
-                        AddEventHandler("onClientResourceStop", function(GetUsedResName)
-                            TriggerServerEvent("bltkac_detection", "AntiResourceRestart detect", "This player tried to stop a client resource.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
-                        end)
-                        AddEventHandler("onClientResourceStart", function(GetUsedResName2)
-                            TriggerServerEvent("bltkac_detection", "AntiResourceRestart detect", "This player tried to stop a client resource.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
-                        end)
-                    end
+                end
+                -- Cycles!
+            end)
+            if ClientConfig.AntiResourceRestart then
+                AddEventHandler("onClientResourceStop", function(GetUsedResName)
+                    TriggerServerEvent("bltkac_detection", "AntiResourceRestart detect", "This player tried to stop a client resource.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
+                end)
+                AddEventHandler("onClientResourceStart", function(GetUsedResName2)
+                    TriggerServerEvent("bltkac_detection", "AntiResourceRestart detect", "This player tried to start a client resource.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
                 end)
             end
+            while true do
+                Citizen.Wait(3000)
+                if ClientConfig.CommandChecker then
+                    NewUserCommands174j = #GetRegisteredCommands()
+                    if OldUserCommands4u6 ~= nil then
+                        if NewUserCommands174j ~= OldUserCommands4u6 then
+                            TriggerServerEvent("bltkac_detection", "Client-side command injected", "This player tried to inject a client side command, probably a modmenu", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
+                        end
+                    end
+                end
+                if ClientConfig.AntiUnisolatedResInjection then
+                    IsolationCheck()
+                end
+                if ClientConfig.ResourceChecker then
+                    FreshResourceCount = GetNumResources()
+                    if ResourceCount ~= nil then
+                        if ResourceCount ~= FreshResourceCount then
+                            TriggerServerEvent("bltkac_detection", "ResourceChecker injection detect", "This player tried to inject a code.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
+                        end
+                    end
+                end
+                
+            end 
         end
     end)
 end
 
 if ClientConfig.DisableNUIDevtools then
     RegisterNUICallback('devtoolOpening', function()
+        Citizen.Wait(500)
+        TriggerServerEvent("bltkac_detection", "Nui DevTools Detect", "This player tried to use nui_devtools.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
+     end)
+     RegisterNUICallback(GetCurrentResourceName(), function()
         Citizen.Wait(500)
         TriggerServerEvent("bltkac_detection", "Nui DevTools Detect", "This player tried to use nui_devtools.", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
      end)
@@ -233,3 +299,4 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
