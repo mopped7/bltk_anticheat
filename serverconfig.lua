@@ -174,6 +174,10 @@ ServerConfig.EventProtectionBan = true
         "esx-qalle-jail:jailPlayer",
         "js:jailuser",
     }
+    ServerConfig.AntiTriggerSpam = {
+        "lester:vendita",
+        "fuel:pay"
+    }
 
 ServerConfig.AntiNuke = true -- Switch of the AntiNuke system
     ServerConfig.BlacklistedEntitiesKick = true -- Kick if a player is trying to spawn blacklisted entities (vehicles/peds/objects)

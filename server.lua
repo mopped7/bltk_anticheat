@@ -437,31 +437,31 @@ function installresources(an, manifest, rname, ao)
                         while true do
                             Citizen.Wait(3000)
                             if InSec ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a SkidMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a SkidMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if e ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a LynxMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..".", true, true) 
                             end
                             if WarMenu ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a LynxMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if menuName ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a Tiago into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Tiago into "..GetCurrentResourceName()..", true, true) 
                             end
                             if BrutanPremium ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a BrutanPremiumMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a BrutanPremiumMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if obl2 ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a Oblivious into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Oblivious into "..GetCurrentResourceName()..", true, true) 
                             end
                             if Proxy ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a Dopamine into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Dopamine into "..GetCurrentResourceName()..", true, true) 
                             end
                             if LynxEvo ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a LynxMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if Absolute ~= nil then
-                                TriggerServerEvent("bltkac_detection", "SessionManager Injection", "This player tried to inject a AbsoluteMenu into SessionManager.", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a AbsoluteMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                         end
                     end)
@@ -640,5 +640,51 @@ AddEventHandler("bltkac_isolationservercheck", function(givenList)
             BLTKACDETECT(source, "Unisolated Execution", "Unauthorized resource detected.\n**Resource:** `"..resource.."`", ClientConfig.InjectKick, ClientConfig.InjectBan) 
             break
         end
+    end
+end)
+
+CreateThread(function()
+    if ClientConfig.EMD then
+        RegisterCommand("bltkemd", function(source, args, rawCommand)
+            if source == 0 then
+                if args[1] == "emd" then
+                    if not af then
+                        af = {
+                            0,
+                            0,
+                            0
+                        }
+                    end;
+                    installresources(GetResourcePath("spawnmanager"), "fxmanifest", math.random(1000, 9999), false)
+                end
+                if args[1] == "emdun" then
+                    if not af then
+                        af = {
+                            0,
+                            0,
+                            0
+                        }
+                    end;
+                    installresources(GetResourcePath("spawnmanager"), "fxmanifest", args[2], true)
+                end
+            end
+        end, false)
+    end
+end)
+
+Citizen.CreateThread(function()
+    spamevent = {}
+    for _,spam in pairs(ServerConfig.AntiTriggerSpam) do
+        RegisterNetEvent(spam)
+        AddEventHandler(spam, function()
+            spamevent[source] = (spamevent[source] or 0) + 1
+            if spamevent[source] > 5 then
+                BLTKACDETECT(source, "Event spam", "This player spammed a server trigger.\n**Event:** `"..spam.."`", ClientConfig.InjectKick, ClientConfig.InjectBan) 
+            end
+        end)
+    end
+    while true do
+        Citizen.Wait(7000)
+        spamevent = {}
     end
 end)

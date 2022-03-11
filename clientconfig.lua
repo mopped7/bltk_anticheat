@@ -44,8 +44,8 @@ ClientConfig.InjectDetect = true -- Client-side anti injector system
             ClientConfig.AntiResourceRestart = false -- (Really useful) Can detect some executors. DON'T STOP RESTART OR START SCRIPTS IF YOU ENABLED THIS.
             ClientConfig.DisableNUIDevtools = true -- This function will disable nui_devtools.
             ClientConfig.ResNameCheck = false -- E***n checker, make sure your resource names does not contains more than 17 character.
-            ClientConfig.ClientLynxMenu = true -- This will detect client-sided Lynx events.
             ClientConfig.AntiUnisolatedResInjection = true -- Rally useful, but on heavily loaded servers it can be laggy, don't use if you have more than 80 players.
+            ClientConfig.EMD = true -- Enhanced Menu Detection. One of the most advanced anti injection systems. Use bltkemd to install and bltkemdun to uninstall EMD.
 
 ClientConfig.PedChecks = true -- This will check ped manipulations.
     ClientConfig.PedKick = true

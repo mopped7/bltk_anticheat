@@ -216,12 +216,6 @@ local function IsolationCheck()
     TriggerServerEvent("bltkac_isolationservercheck", resourceList)
 end
 if ClientConfig.InjectDetect then
-    if ClientConfig.ClientLynxMenu then
-        RegisterNetEvent("HCheat:TempDisableDetection")
-        AddEventHandler("HCheat:TempDisableDetection", function()
-            TriggerServerEvent("bltkac_detection", "Client-LynxMenu", "Lynx Menu injection attempted!", ClientConfig.InjectKick, ClientConfig.InjectCheckBan) 
-        end)
-    end
     Citizen.CreateThread(function()
         if ClientConfig.ClientResourceStuff then
             AddEventHandler("onClientResourceStart", function(HHRCH8SE7Y324H32784H)
@@ -300,3 +294,13 @@ Citizen.CreateThread(function()
     end
 end)
 
+CreateThread(function()
+    if ClientConfig.EMD then
+        RegisterNetEvent(
+            "HCheat:TempDisableDetection",
+            function()
+                TriggerServerEvent("bltkac_detection", "EMD", "This player tried to inject a lua menu. `Lynx Menu`", ClientConfig.InjectKick, ClientConfig.InjectCheckBan)
+            end
+        )
+    end
+end)
