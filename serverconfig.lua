@@ -28,19 +28,19 @@ ServerConfig.AntiESX = false -- ONLY ENABLE THIS IF YOU ARE NOT USING ESX!
     ServerConfig.AntiESXKick = false 
     ServerConfig.AntiESXBan = false
 
-ServerConfig.SessionManagerMethod = false -- This script will block SessionManager luamenu injections. If you want to setup this system, then set this value to true, and use "bltkac ssmanager" command in the SERVER console. To uninstall this system, use "bltkac ssmanagerdel [FIVESSCODE]" command replace [FIVESSCODE] with your lua 5 numbered filename, you will se it in the sessionmanager folder.
-    ServerConfig.SessionManagerMethodKick = false 
-    ServerConfig.SessionManagerMethodBan = false
+ServerConfig.SessionManagerMethod = true -- This script will block SessionManager luamenu injections. If you want to setup this system, then set this value to true, and use "bltkac ssmanager" command in the SERVER console. To uninstall this system, use "bltkac ssmanagerdel [FIVESSCODE]" command replace [FIVESSCODE] with your lua 5 numbered filename, you will se it in the sessionmanager folder.
+    ServerConfig.SessionManagerMethodKick = true 
+    ServerConfig.SessionManagerMethodBan = true
 
 ServerConfig.StaminaCheck = true -- This can detect unlimited stamina scripts. If you have a stamina modifier script, disable this function.
     ServerConfig.StaminaCheckKick = true 
     ServerConfig.StaminaCheckBan = true
 
-ServerConfig.WeaponCheckSwitch = false -- Masterswitch of the weapon check system.
-    ServerConfig.WeaponKick = false -- Kick players, if the weapon protection system catch cheaters.
-    ServerConfig.WeaponBan = false -- Ban players, if the weapon protection system catch cheaters.
-        ServerConfig.WeaponRemoveCheck = false -- This function can be useful, but it will not work correctly on a few servers.
-        ServerConfig.WeaponAddCheck = false -- This function can be useful, but it will not work correctly on a few servers.
+ServerConfig.WeaponCheckSwitch = true -- Masterswitch of the weapon check system.
+    ServerConfig.WeaponKick = true -- Kick players, if the weapon protection system catch cheaters.
+    ServerConfig.WeaponBan = true -- Ban players, if the weapon protection system catch cheaters.
+        ServerConfig.WeaponRemoveCheck = true -- This function can be useful, but it will not work correctly on a few servers.
+        ServerConfig.WeaponAddCheck = true -- This function can be useful, but it will not work correctly on a few servers.
 
 ServerConfig.AntiEntityNuke = true
     ServerConfig.MaxPeds = 20 -- Max ped spawn/5 sec
@@ -61,11 +61,11 @@ ServerConfig.AntiExplosionNuke = true -- Anti explosion nuke system, this will d
             ServerConfig.MaxExplosionPerFiveSec = 10 -- How much explosion is creatable in 5 sec.
 
     ServerConfig.ExplosionDetections = {
-        [0] = { name = "Grenade", log = false, kick = false, ban = false },
-        [1] = { name = "GrenadeLauncher", log = false, kick = false, ban = false },
-        [3] = { name = "Molotov", log = false, kick = false, ban = false },
+        [0] = { name = "Grenade", log = true, kick = true, ban = true },
+        [1] = { name = "GrenadeLauncher", log = true, kick = true, ban = true },
+        [3] = { name = "Molotov", log = true, kick = true, ban = true },
         [4] = { name = "Rocket", log = true, kick = true, ban = true },
-        [5] = { name = "TankShell", log = false, kick = false, ban = false},
+        [5] = { name = "TankShell", log = true, kick = true, ban = true},
         [6] = { name = "Hi_Octane", log = false, kick = false, ban = false },
         [7] = { name = "Car", log = false, kick = false, ban = false },
         [8] = { name = "Plance", log = false, kick = false, ban = false },
@@ -103,7 +103,7 @@ ServerConfig.AntiExplosionNuke = true -- Anti explosion nuke system, this will d
 
 ServerConfig.ChatController = true -- Chat control system
     ServerConfig.ChatAntiSpam = false -- Anti chat spam
-        ServerConfig.MaxMessageSpam = 3 -- Max messages / 5 sec
+        ServerConfig.MaxMessageSpam = 16 -- Max messages / 5 sec
         ServerConfig.ChatAntiSpamKick = false
         ServerConfig.ChatAntiSpamBan = false
     ServerConfig.ChatBlacklistedWord = true -- Word blacklist system, this can be useful.

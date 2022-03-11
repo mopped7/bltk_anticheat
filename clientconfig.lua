@@ -21,12 +21,12 @@ ClientConfig.MenuChecks = true -- Menucheck system
                 }
             ClientConfig.NoNPC = false -- Turn this on, if you have a NoNPC server. This function will delete ALL UNKNOWN ped.
             ClientConfig.TxdMenu = true -- This will detect some textured mod menu.
-            ClientConfig.ThermalVision = false -- This will detect thermal vision if the player is not in any helicopter.
-            ClientConfig.NightVision = false -- This will detect night vision.
+            ClientConfig.ThermalVision = true -- This will detect thermal vision if the player is not in any helicopter.
+            ClientConfig.NightVision = true -- This will detect night vision.
             ClientConfig.RagdollDetection = true -- Detecting Anti-Ragdoll systems.
             ClientConfig.MenyooASI = false -- It can detect some ASI menu like Menyoo, be careful with this function, this function can cause false positives on some servers.
             ClientConfig.AntiFreeCam = true -- Anti Freecam system, that can be useful against entity spawner scripts.
-                ClientConfig.FreecamLimit = 300 -- Freecam distance limit, 100 is a good starting point, but if you get false bans with this, you should increase this number
+                ClientConfig.FreecamLimit = 100 -- Freecam distance limit, 100 is a good starting point, but if you get false bans with this, you should increase this number
             ClientConfig.MaxArmor = 100 -- Max armor (usually 100)
             ClientConfig.AntiInvisible = false -- It may not work correctly on some servers.
             ClientConfig.SpeedHack = false -- It may not work correctly on some servers.
