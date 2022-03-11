@@ -45,6 +45,7 @@ Always be careful when you are configuring this anticheat. You will need to find
 - Anti Explosive Bullets
 - Anti Noclip
 - Anti Weapon Damage Changer
+- EMD
 
 **Server-side dev functions**
 - Debug Mode
@@ -63,7 +64,7 @@ Always be careful when you are configuring this anticheat. You will need to find
 - Argument protected events
 - Anti Negative Events
 - Object/Vehicle/Ped blacklist
-
+- Anti Event spam
 
 ## Updates? Contributing?
 
