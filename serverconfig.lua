@@ -1,4 +1,4 @@
--- BLTK_ANTICHEAT V3
+-- BLTK_ANTICHEAT V4
 
 
 
@@ -7,6 +7,7 @@ ServerConfig = {}
 -- [[Always configure your anticheat properly, a bad configuration can cause false positives, and ban innocent players. Turn off what you don't need, turn on what you need, and fill the tables properly.]]
 
 -- BYPASS ACE: bltk-ac.bypass
+-- ADMIN ACE: bltk-ac.admin
 
 ServerConfig.DebugMode = false -- Debug Mode, prevent players from getting banned and kicked, only use it for troubleshooting and other testing stuff. This function will also disable bypass, to let admins to troubleshoot the Anticheat.
 ServerConfig.KickMessage = "Default config" -- Change this
@@ -20,21 +21,13 @@ ServerConfig.UsernameBlacklist = true
         "csgocases", "K9GrillzUK.co.uk", "moat.gg", "princevidz.com", "princevidz", "pvpro.com", "Pvpro", "ez.krimes.ro", "loot.farm", "arma3fisherslife.net", "arma3fisherslife", "egamers.io", "ifn.gg", "sups.gg", "tradeit.gg",
         "§", "csgotraders.net", "csgotraders", "hurtfun.com", "hurtfun", "gamekit.com", "t.tv", "yandex.ru", "yandex", "csgofly.com", "csgofly", "pornhub.com", "pornhub","cs.deals","twat", "STRESS.PW"}
 
-ServerConfig.PCKMenu = true -- PCK Menu Detect
-    ServerConfig.PCKMenuKick = true 
-    ServerConfig.PCKMenuBan = true
-
 ServerConfig.AntiESX = false -- ONLY ENABLE THIS IF YOU ARE NOT USING ESX!
     ServerConfig.AntiESXKick = false 
     ServerConfig.AntiESXBan = false
 
-ServerConfig.SessionManagerMethod = true -- This script will block SessionManager luamenu injections. If you want to setup this system, then set this value to true, and use "bltkac ssmanager" command in the SERVER console. To uninstall this system, use "bltkac ssmanagerdel [FIVESSCODE]" command replace [FIVESSCODE] with your lua 5 numbered filename, you will se it in the sessionmanager folder.
-    ServerConfig.SessionManagerMethodKick = true 
-    ServerConfig.SessionManagerMethodBan = true
-
-ServerConfig.StaminaCheck = true -- This can detect unlimited stamina scripts. If you have a stamina modifier script, disable this function.
-    ServerConfig.StaminaCheckKick = true 
-    ServerConfig.StaminaCheckBan = true
+ServerConfig.ClearPedTasksImmediately = true -- Detects if someone is trying to ClearPedTasksImmediately other players (most likely trying to kick players from vehicles)
+    ServerConfig.ClearPedTasksImmediatelyKick = true
+    ServerConfig.ClearPedTasksImmediatelyBan = true
 
 ServerConfig.WeaponCheckSwitch = true -- Masterswitch of the weapon check system.
     ServerConfig.WeaponKick = true -- Kick players, if the weapon protection system catch cheaters.
@@ -44,7 +37,7 @@ ServerConfig.WeaponCheckSwitch = true -- Masterswitch of the weapon check system
 
 ServerConfig.AntiEntityNuke = true
     ServerConfig.MaxPeds = 20 -- Max ped spawn/5 sec
-    ServerConfig.MaxVehs = 20 -- Max vehicle spawn/5 sec
+    ServerConfig.MaxVehs = 6 -- Max vehicle spawn/5 sec
         ServerConfig.AntiEntityNukeKick = true
         ServerConfig.AntiEntityNukeBan = true
 
@@ -167,17 +160,25 @@ ServerConfig.EventProtectionBan = true
         ["AdminMenu:giveBank"] = {maxvalue=1000},
         ["AdminMenu:giveCash"] = {maxvalue=1000},
         ["LegacyFuel:PayFuel"] = {maxvalue=1000},
-        ["esx_society:billing"] = {maxvalue=100000},
+        ["esx_billing:sendBill"] = {maxvalue=100000},
     }
     ServerConfig.NegativeVauleEvents = { -- Negative value blocker. Put your jail/communityservice events here, this script will protect your server against cheaters trying to jail everyone etc... DON'T FORGET COMMAS!
         "esx_communityservice:SendToCommunityService",
         "esx-qalle-jail:jailPlayer",
+        "esx_billing:sendBill",
         "js:jailuser",
     }
     ServerConfig.AntiTriggerSpam = {
         "lester:vendita",
         "fuel:pay"
     }
+
+ServerConfig.BlacklistedParticles = { -- You can get particles from here : https://vespura.com/fivem/particle-list/
+    [GetHashKey("scr_clown_appears")] = { name = "scr_clown_appears" },
+    [GetHashKey("scr_ex1_plane_exp_sp")] = { name = "scr_ex1_plane_exp_sp" },
+    [GetHashKey("td_blood_throat")] = { name = "td_blood_throat" },
+    [GetHashKey("scr_indep_firework_trailburst")] = { name = "scr_indep_firework_trailburst" },
+}
 
 ServerConfig.AntiNuke = true -- Switch of the AntiNuke system
     ServerConfig.BlacklistedEntitiesKick = true -- Kick if a player is trying to spawn blacklisted entities (vehicles/peds/objects)
@@ -219,6 +220,8 @@ ServerConfig.AntiNuke = true -- Switch of the AntiNuke system
                 [GetHashKey("stt_prop_stunt_bblock_hump_01")] = {logname="Stunt Prop"},
                 [GetHashKey("stt_prop_stunt_bblock_hump_02")] = {logname="Stunt Prop"},
                 [GetHashKey("stt_prop_stunt_bblock_lrg1")] = {logname="Stunt Prop"},
+                [GetHashKey("prop_container_ld2")] = {logname="Container (fallout premade) prop_container_ld2"},
+                [GetHashKey("prop_container_05a")] = {logname="Container (fallout premade) prop_container_05a"},
                 [GetHashKey("stt_prop_stunt_bblock_lrg2")] = {logname="Stunt Prop"},
                 [GetHashKey("stt_prop_stunt_bblock_lrg3")] = {logname="Stunt Prop"},
                 [GetHashKey("stt_prop_stunt_bblock_mdm1")] = {logname="Stunt Prop"},

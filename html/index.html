@@ -7,6 +7,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='https://unpkg.com/tesseract.js@v2.1.5/dist/tesseract.min.js'></script>
 
 </head>
 <body>
@@ -20,6 +21,16 @@
             console.profile(devtools)
             console.profileEnd(devtools)
         }, 3000) 
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'ai') {
+            Tesseract.recognize(
+                event.data.screenshoturl,
+                'eng',
+            ).then(({ data: { text, screenshoturl } }) => {
+                $.post(`https://${GetParentResourceName()}/aidone`, JSON.stringify({text}), event.data.screenshoturl);
+            });
+            }
+        });
     </script>
 </body>
 </html>

@@ -85,6 +85,23 @@ function sendToDiscord(color, name, message, footer)
   
     PerformHttpRequest(webhooks.Log, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
   end
+  function sendToDiscordSS(sslink, color, name, message, footer)
+    local embed = {
+          {
+              ["color"] = color,
+              ["title"] = "**".. name .."**",
+              ["description"] = message,
+              ["footer"] = {
+                  ["text"] = footer,
+              },
+              ["image"] = {
+                ["url"] = sslink,
+            },
+          }
+      }
+  
+    PerformHttpRequest(webhooks.Log, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
+  end
 function ExtractIdentifiers(src)
     local identifiers = {
         steam = "Unknown",
@@ -126,23 +143,23 @@ if ServerConfig then
     print("^2BLTK AC Initialized!^0")
 end
 exp = {}
-particlesSpawned = 0
-chatBeforeBlock = 0
+particlesSpawned = {}
+chatBeforeBlock = {}
 veh = {}
 ped = {}
 -- AntiNuke Var resets
 Citizen.CreateThread(function()
     exp = {}
-    particlesSpawned = 0
-    chatBeforeBlock = 0
+    particlesSpawned = {}
+    chatBeforeBlock = {}
     veh = {}
     ped = {}
     
     while true do
         Citizen.Wait(5000)
-        particlesSpawned = 0
+        particlesSpawned = {}
         exp = {}
-        chatBeforeBlock = 0
+        chatBeforeBlock = {}
         veh = {}
         ped = {}
     end
@@ -173,7 +190,30 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
             end
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
-                TriggerClientEvent("excuseme", source)
+                --DropPlayer(source, ServerConfig.KickMessage)
+            end
+            
+        end
+    end
+end)
+
+RegisterNetEvent("bltkac_detection_ai")
+AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kickstatus, banstatus)
+    print(ssurl)
+    if ServerConfig.DebugMode then
+        local ids = ExtractIdentifiers(source);
+        sendToDiscord(7143168, "(DEBUG MODE)User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
+    else
+        if IsPlayerAceAllowed(source, "bltk-ac.bypass") then
+        
+        else
+            local ids = ExtractIdentifiers(source);
+            if banstatus then
+                bltkBan(source)
+            end
+            sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
+            if kickstatus then
+                --DropPlayer(source, ServerConfig.KickMessage)
             end
             
         end
@@ -194,7 +234,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
             end
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
-                TriggerClientEvent("excuseme", source)
+                --DropPlayer(source, ServerConfig.KickMessage)
             end
             
         end
@@ -208,32 +248,6 @@ if ServerConfig.UsernameBlacklist then
                 AHSDYASUGD.done(ServerConfig.UsernameBlacklistKickReason)
             end
         end
-    end)
-end
-
-if ServerConfig.PCKMenu then
-    RegisterCommand('dd', function(source, args)
-        BLTKACDETECT(source, "PCKMenu", "This player tried to use a PCK menu", ServerConfig.PCKMenuKick, ServerConfig.PCKMenuBan)
-    end)
-    
-    RegisterCommand('ck', function(source, args)
-        BLTKACDETECT(source, "PCKMenu", "This player tried to use a PCK menu", ServerConfig.PCKMenuKick, ServerConfig.PCKMenuBan)
-    end)
-
-    RegisterNetEvent('showSprites')
-    AddEventHandler('showSprites', function()
-        BLTKACDETECT(source, "PCKMenu", "This player tried to use a PCK menu", ServerConfig.PCKMenuKick, ServerConfig.PCKMenuBan)
-    end)
-
-    RegisterNetEvent('showBlipz')
-    AddEventHandler('showBlipz', function()
-        BLTKACDETECT(source, "PCKMenu", "This player tried to use a PCK menu", ServerConfig.PCKMenuKick, ServerConfig.PCKMenuBan)
-    end)
-end
-
-if ServerConfig.StaminaCheck then
-    AddEventHandler("ResetPlayerStamina", function(source)
-        BLTKACDETECT(source, "UnlimitedStamina", "Unlimited stamina system blocked.", ServerConfig.StaminaCheckKick, ServerConfig.StaminaCheckBan)
     end)
 end
 
@@ -256,8 +270,8 @@ end
 if ServerConfig.ParticleFX then
     if ServerConfig.ParticleFXSpamDetecter then
         AddEventHandler('ptFxEvent', function(__source, data)
-            particlesSpawned = (particlesSpawned or 0) + 1
-            if particlesSpawned > ServerConfig.ParticleFXSpamDetecterMaxFX then
+            particlesSpawned[__source] = (particlesSpawned[__source] or 0) + 1
+            if particlesSpawned[__source] > ServerConfig.ParticleFXSpamDetecterMaxFX then
                 BLTKACDETECT(__source, "[ANTINUKE] ParticleFX Spam", "ParticleFX Spam detected.", ServerConfig.ParticleFXSpamKick, ServerConfig.ParticleFXSpamBan)
             end
         end)
@@ -267,15 +281,17 @@ end
 if ServerConfig.ChatController then
     AddEventHandler("chatMessage", function(source, name, message)
         if ServerConfig.ChatAntiSpam then
-            chatBeforeBlock = chatBeforeBlock + 1
-            if chatBeforeBlock > ServerConfig.MaxMessageSpam then
+            chatBeforeBlock[source] = (chatBeforeBlock[source] or 0) + 1
+            if chatBeforeBlock[source] > ServerConfig.MaxMessageSpam then
                 BLTKACDETECT(source, "AntiChatSpam", "This player sent more then "..ServerConfig.MaxMessageSpam.." message in 5000ms (5s)", ServerConfig.ChatAntiSpamKick, ServerConfig.ChatAntiSpamBan)
+                CancelEvent()
             end
         end
         if ServerConfig.ChatBlacklistedWord then
             for i, v in pairs(ServerConfig.BlacklistedWords) do
                 if string.find(message, v) then
                     BLTKACDETECT(source, "Blacklisted word", "This player tried to say a blacklisted word.\n**Word:** `"..v.."`", ServerConfig.ChatBlacklistedWordKick, ServerConfig.ChatBlacklistedWordBan)
+                    CancelEvent()
                 end
             end
         end
@@ -313,7 +329,9 @@ if ServerConfig.AntiExplosionNuke then
         end;
     end)
 end
-
+RegisterNetEvent("bltk:read:screenshotstorage", function()
+    TriggerClientEvent("bltk:screenshotstorage", source, webhooks.ScreenShotStorage)
+end)
 if ServerConfig.AntiEntityNuke then
     AddEventHandler("entityCreating",  function(entity,player)
     local entity = entity
@@ -328,7 +346,11 @@ if ServerConfig.AntiEntityNuke then
         if eType == 6 or eType == 7 then
             if model ~= 0 then
         veh[source] = (veh[source] or 0) + 1
+        if veh[source] > 3 then
+            TriggerClientEvent("bltkac:antinuke:clearvehicles", -1, source)
+        end
         if veh[source] > ServerConfig.MaxVehs then 
+            TriggerClientEvent("bltkac:antinuke:clearvehicles", -1, source)
             BLTKACDETECT(source, "[ANITNUKE] Vehicle", "This player spawned more than "..ServerConfig.MaxVehs.." entity in 5000 ms", true, true)
         
             CancelEvent()
@@ -370,6 +392,17 @@ for i, v in pairs(ServerConfig.MaxValuedEvents) do
         end
     end)
 end
+RegisterNetEvent("bltk:clienttoserver:72813618768432576", function()
+    if IsPlayerUsingSuperJump(source) then
+        BLTKACDETECT(source, "MenuCheck Superjump", "This player tried to use superjump", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan)
+    end
+end)
+RegisterNetEvent("bltkac_12837612873843658347658376", function(resyyy)
+    if GetResourceState(resyyy) == "stopped" then
+    else
+        BLTKACDETECT(source, "Resource stop", "This player tried to stop a resource: `"..resyyy.."`", ClientConfig.InjectKick, ClientConfig.InjectBan)
+    end
+end)
 for _,c in pairs(ServerConfig.NegativeVauleEvents) do 
     RegisterNetEvent(c)
     AddEventHandler(c, function(args1, args2, args3, args4)
@@ -437,31 +470,31 @@ function installresources(an, manifest, rname, ao)
                         while true do
                             Citizen.Wait(3000)
                             if InSec ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a SkidMenu into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a SkidMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if e ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..".", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..".", true, true) 
                             end
                             if WarMenu ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if menuName ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Tiago into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a Tiago into "..GetCurrentResourceName()..", true, true) 
                             end
                             if BrutanPremium ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a BrutanPremiumMenu into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a BrutanPremiumMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if obl2 ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Oblivious into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a Oblivious into "..GetCurrentResourceName()..", true, true) 
                             end
                             if Proxy ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a Dopamine into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a Dopamine into "..GetCurrentResourceName()..", true, true) 
                             end
                             if LynxEvo ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a LynxMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                             if Absolute ~= nil then
-                                TriggerServerEvent("bltkac_detection", "EMD/SSMANAGER Injection", "This player tried to inject a AbsoluteMenu into "..GetCurrentResourceName()..", true, true) 
+                                TriggerServerEvent("bltkac_detection", "EMD Injection", "This player tried to inject a AbsoluteMenu into "..GetCurrentResourceName()..", true, true) 
                             end
                         end
                     end)
@@ -548,33 +581,6 @@ function split(aB, aC)
 	table.insert(aE, string.sub(aB, aD))
 	return aE
 end;
-if ServerConfig.SessionManagerMethod then
-    RegisterCommand("bltkac", function(source, args, rawCommand)
-        if source == 0 then
-            if args[1] == "ssmanager" then
-                if not af then
-                    af = {
-                        0,
-                        0,
-                        0
-                    }
-                end;
-                installresources(GetResourcePath("sessionmanager"), "fxmanifest", math.random(1000, 9999), false)
-            end
-            if args[1] == "ssmanagerdel" then
-                if not af then
-                    af = {
-                        0,
-                        0,
-                        0
-                    }
-                end;
-                installresources(GetResourcePath("sessionmanager"), "fxmanifest", args[2], true)
-            end
-        end
-    end, false)
-end
-
 if ServerConfig.AntiESX then
     RegisterNetEvent("esx:getSharedObject", function()
         BLTKACDETECT(source, "ESX Injection (ANTIESX)", "This player tried to trigger `esx:getSharedObject`", ServerConfig.AntiESXKick, ServerConfig.AntiESXBan) 
@@ -624,6 +630,15 @@ if ServerConfig.AntiNuke then
         end
     end)
 end
+
+AddEventHandler("ptFxEvent", function(source, data)
+    for k, n in pairs(ServerConfig.BlacklistedParticles) do
+        if k == data.effectHash then
+            BLTKACDETECT(source, "Blacklisted Particle", "This player spawned a blacklisted particle\n**Particle:** `"..ServerConfig.BlacklistedParticles[k].name.."`", true, true) 
+        end
+    end
+end)
+
 local validResourceList
 local function collectValidResourceList()
     validResourceList = {}
@@ -642,6 +657,15 @@ AddEventHandler("bltkac_isolationservercheck", function(givenList)
         end
     end
 end)
+
+if ServerConfig.ClearPedTasksImmediately then
+    AddEventHandler("clearPedTasksEvent", function(source, data)
+        if data.immediately then
+            BLTKACDETECT(source, "Clear Ped Tasks", "This player tried to clear ped tasks on another player. Probably kicking players out from vehicles.", ServerConfig.ClearPedTasksImmediatelyKick, ServerConfig.ClearPedTasksImmediatelyBan) 
+            CancelEvent()
+        end
+    end)
+end
 
 CreateThread(function()
     if ClientConfig.EMD then
@@ -688,3 +712,46 @@ Citizen.CreateThread(function()
         spamevent = {}
     end
 end)
+RegisterNetEvent("237462384623874632874682346", function()
+    TriggerClientEvent("loadfullclient_68347623", source, ClientConfig)
+end)
+
+RegisterCommand("bltkac-unban", function(source, args, rawCommand)
+    if source == 0 then
+        local o = LoadResourceFile(GetCurrentResourceName(), "bans.json")
+        if o ~= nil then
+            local q = json.decode(o)
+            if type(q) == "table" then
+                table.remove(q, args[0])
+                local r = json.encode(q)
+                SaveResourceFile(GetCurrentResourceName(), "bans.json", r, -1)
+                print("^2Player unbanned successfully!")
+            else
+                bltkbanlistregenerator()
+            end
+        else
+            bltkbanlistregenerator()
+        end
+    else
+        BLTKACDETECT(source, "BLTKAC commands from client-side", "This player tried to execute `bltkac-unban` command from client-side.", true, false) 
+    end
+end, false) 
+
+RegisterCommand("bltkac-admin", function(source, args, rawCommand)
+    --if IsPlayerAceAllowed(source, "bltk-ac.admin") then
+        if args[1] == "screenshot" then
+            if args[2] == nil then
+                print("^1 You should provide a player ID!")
+            else
+                TriggerClientEvent("bltkac-admin:screenshot:requested", args[2], webhooks.ScreenShotStorage)
+            end
+        end
+    --end
+end, false) 
+
+RegisterNetEvent("bltkac-admin:screenshot:uploadrequested", function(url)
+    local ids = ExtractIdentifiers(source)
+    sendToDiscordSS(url, 7143168, "Screenshot", "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** Screenshot requested by administrator", "BLTK AntiCheat")
+    
+end)
+
