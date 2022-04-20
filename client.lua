@@ -557,7 +557,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
         
                     local dtbtwocoord = #(vector3(ocoords) - vector3(newcoords))
                     if oped == newped and not IsPedInAnyVehicle(PlayerPedId(), false) and dtbtwocoord > ClientConfig.TeleportDistance and not IsPedInParachuteFreeFall(PlayerPedId()) then
-                        SetEntityCoords(PlayerPedId(), ocoords.x, ocoords.y, ocoords.z)
+                        --SetEntityCoords(PlayerPedId(), ocoords.x, ocoords.y, ocoords.z)
                         tpflags = tpflags + 1
                         if tpflags > 4 then
                             TriggerServerEvent("bltkac_detection", "MenuCheck Teleport", "This player tried to teleport 5 times. Teleport distance: `"..dtbtwocoord.."`", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
