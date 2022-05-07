@@ -190,7 +190,7 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
             end
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
-                --DropPlayer(source, ServerConfig.KickMessage)
+                DropPlayer(source, ServerConfig.KickMessage)
             end
             
         end
@@ -213,7 +213,7 @@ AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kic
             end
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
-                --DropPlayer(source, ServerConfig.KickMessage)
+                DropPlayer(source, ServerConfig.KickMessage)
             end
             
         end
@@ -234,7 +234,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
             end
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
-                --DropPlayer(source, ServerConfig.KickMessage)
+                DropPlayer(source, ServerConfig.KickMessage)
             end
             
         end
