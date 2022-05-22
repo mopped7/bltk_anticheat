@@ -1,18 +1,11 @@
 function bltkbanlistregenerator()
 	local o = LoadResourceFile(GetCurrentResourceName(), "bans.json")
-	if not o or o == "" then
+	if not o or o == "" or not json.decode(o) then
 		SaveResourceFile(GetCurrentResourceName(), "bans.json", "[]", -1)
-
-	else
-		local p = json.decode(o)
-		if not p then
-			SaveResourceFile(GetCurrentResourceName(), "bans.json", "[]", -1)
-			p = {}
-
-		end
 	end
 end;
 bltkbanlistregenerator()
+
 function bltkBan(source)
 	local o = LoadResourceFile(GetCurrentResourceName(), "bans.json")
 	if o ~= nil then
@@ -111,25 +104,19 @@ function ExtractIdentifiers(src)
         xbl = "Unknown",
         live = "Unknown"
     }
+
     for i = 0, GetNumPlayerIdentifiers(src) - 1 do
-        local id = GetPlayerIdentifier(src, i)
-        if string.find(id, "steam") then
-            identifiers.steam = id
-        elseif string.find(id, "ip") then
-            identifiers.ip = id
-        elseif string.find(id, "discord") then
-            identifiers.discord = id
-        elseif string.find(id, "license") then
-            identifiers.license = id
-        elseif string.find(id, "xbl") then
-            identifiers.xbl = id
-        elseif string.find(id, "live") then
-            identifiers.live = id
-        end
+        local id = split(GetPlayerIdentifier(src, i), ':')
+        identifiers[id[1]] = id[2] 
     end
 
     return identifiers
 end
+
+RegisterCommand("tesztes", function(player)
+    print(json.encode(ExtractIdentifiers(player), {indent = true}))
+end)
+
 if ServerConfig then
     local surprise = [[
         ____  _   _______ _  __           _   _ _______ _____ _____ _    _ ______       _______ 
@@ -181,9 +168,7 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
         local ids = ExtractIdentifiers(source);
         sendToDiscord(7143168, "(DEBUG MODE)User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
     else
-        if IsPlayerAceAllowed(source, "bltk-ac.bypass") then
-        
-        else
+        if not IsPlayerAceAllowed(source, "bltk-ac.bypass") then
             local ids = ExtractIdentifiers(source);
             if banstatus then
                 bltkBan(source)
@@ -191,8 +176,7 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
                 DropPlayer(source, ServerConfig.KickMessage)
-            end
-            
+            end            
         end
     end
 end)
@@ -204,9 +188,7 @@ AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kic
         local ids = ExtractIdentifiers(source);
         sendToDiscord(7143168, "(DEBUG MODE)User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
     else
-        if IsPlayerAceAllowed(source, "bltk-ac.bypass") then
-        
-        else
+        if not IsPlayerAceAllowed(source, "bltk-ac.bypass") then
             local ids = ExtractIdentifiers(source);
             if banstatus then
                 bltkBan(source)
@@ -214,8 +196,7 @@ AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kic
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
                 DropPlayer(source, ServerConfig.KickMessage)
-            end
-            
+            end            
         end
     end
 end)
@@ -225,9 +206,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
         local ids = ExtractIdentifiers(source);
         sendToDiscord(7143168, "(DEBUG MODE)User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
     else
-        if IsPlayerAceAllowed(source, "bltk-ac.bypass") then
-        
-        else
+        if not IsPlayerAceAllowed(source, "bltk-ac.bypass") then
             local ids = ExtractIdentifiers(source);
             if banstatus then
                 bltkBan(source)
@@ -235,8 +214,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
             sendToDiscord(7143168, "User detect - "..mreason, "**ID:** "..source.."\n**Name:** "..GetPlayerName(source).."\n**Steam Hex** "..ids.steam.."\n**Discord ID** "..ids.discord.."\n**Rockstar License** "..ids.license.."\n**Xbox Live** "..ids.live.."\n**Xbox Microsoft** "..ids.xbl.."\n\n**Reason:** "..description, "BLTK AntiCheat")
             if kickstatus then
                 DropPlayer(source, ServerConfig.KickMessage)
-            end
-            
+            end            
         end
     end
 end
@@ -571,15 +549,12 @@ function searchall(an, ao)
 	end
 end;
 function split(aB, aC)
-	local aD, aE = 0, {}
-	for aF, aG in function()
-		return string.find(aB, aC, aD, true)
-	end do
-		table.insert(aE, string.sub(aB, aD, aF - 1))
-		aD = aG + 1
-	end;
-	table.insert(aE, string.sub(aB, aD))
-	return aE
+    local splitted={}
+    for str in string.gmatch(aB, "([^"..aC.."]+)") do
+        table.insert(splitted, str)
+    end
+
+    return splitted
 end;
 if ServerConfig.AntiESX then
     RegisterNetEvent("esx:getSharedObject", function()
