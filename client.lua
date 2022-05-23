@@ -1,52 +1,5 @@
 SCWHURL = nil
 
-local entityEnumerator = {
-    __gc = function(enum)
-      if enum.destructor and enum.handle then
-        enum.destructor(enum.handle)
-      end
-      enum.destructor = nil
-      enum.handle = nil
-    end
-  }
-  
-  local function EnumerateEntities(initFunc, moveFunc, disposeFunc)
-    return coroutine.wrap(function()
-      local iter, id = initFunc()
-      if not id or id == 0 then
-        disposeFunc(iter)
-        return
-      end
-      
-      local enum = {handle = iter, destructor = disposeFunc}
-      setmetatable(enum, entityEnumerator)
-      
-      local next = true
-      repeat
-        coroutine.yield(id)
-        next, id = moveFunc(iter)
-      until not next
-      
-      enum.destructor, enum.handle = nil, nil
-      disposeFunc(iter)
-    end)
-  end
-
-  function EnumerateObjects()
-    return EnumerateEntities(FindFirstObject, FindNextObject, EndFindObject)
-  end
-  
-  function EnumeratePeds()
-    return EnumerateEntities(FindFirstPed, FindNextPed, EndFindPed)
-  end
-  
-  function EnumerateVehicles()
-    return EnumerateEntities(FindFirstVehicle, FindNextVehicle, EndFindVehicle)
-  end
-  
-  function EnumeratePickups()
-    return EnumerateEntities(FindFirstPickup, FindNextPickup, EndFindPickup)
-  end
 TriggerServerEvent("237462384623874632874682346")
 RegisterNetEvent("loadfullclient_68347623", function(config)
     ClientConfig = config
@@ -128,8 +81,8 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
                         end
                     end
                     if ClientConfig.NoNPC then
-                        for ped in EnumeratePeds() do
-                            if not (IsPedAPlayer(ped)) then
+                        for _, ped in pairs(GetGamePool("CPed")) do
+                            if DoesEntityExist(ped) and not (IsPedAPlayer(ped)) then
                                 if not IsEntityAMissionEntity(ped) then
                                     SetEntityAsMissionEntity(ped, false, false)
                                     DeleteEntity(ped)
@@ -145,10 +98,8 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
                     end
                     if ClientConfig.ThermalVision then
                         if GetUsingseethrough() then
-                           if IsPedInAnyHeli(PlayerPedId()) then
-                            
-                            else
-                            TriggerServerEvent("bltkac_detection", "MenuCheck Visions", "ThermalVision detected.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
+                            if not IsPedInAnyHeli(PlayerPedId()) then
+                                TriggerServerEvent("bltkac_detection", "MenuCheck Visions", "ThermalVision detected.", ClientConfig.MenuCheckKick, ClientConfig.MenuCheckBan) 
                             end
                         end
                     end
