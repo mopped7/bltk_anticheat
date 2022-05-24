@@ -83,10 +83,10 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
                     if ClientConfig.NoNPC then
                         for _, ped in pairs(GetGamePool("CPed")) do
                             if DoesEntityExist(ped) and not (IsPedAPlayer(ped)) then
-                                if not IsEntityAMissionEntity(ped) then
+                                --if not IsEntityAMissionEntity(ped) then
                                     SetEntityAsMissionEntity(ped, false, false)
                                     DeleteEntity(ped)
-                                end
+                                --end
                             end
                         end
                     end
