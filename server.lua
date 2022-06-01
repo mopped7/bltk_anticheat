@@ -113,10 +113,6 @@ function ExtractIdentifiers(src)
     return identifiers
 end
 
-RegisterCommand("tesztes", function(player)
-    print(json.encode(ExtractIdentifiers(player), {indent = true}))
-end)
-
 if ServerConfig then
     local surprise = [[
         ____  _   _______ _  __           _   _ _______ _____ _____ _    _ ______       _______ 
