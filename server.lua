@@ -709,7 +709,7 @@ RegisterCommand("bltkac-unban", function(source, args, rawCommand)
 end, false) 
 
 RegisterCommand("bltkac-admin", function(source, args, rawCommand)
-    --if IsPlayerAceAllowed(source, "bltk-ac.admin") then
+    if IsPlayerAceAllowed(source, "bltk-ac.admin") then
         if args[1] == "screenshot" then
             if args[2] == nil then
                 print("^1 You should provide a player ID!")
@@ -717,7 +717,7 @@ RegisterCommand("bltkac-admin", function(source, args, rawCommand)
                 TriggerClientEvent("bltkac-admin:screenshot:requested", args[2], webhooks.ScreenShotStorage)
             end
         end
-    --end
+    end
 end, false) 
 
 RegisterNetEvent("bltkac-admin:screenshot:uploadrequested", function(url)
