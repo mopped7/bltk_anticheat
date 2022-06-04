@@ -560,33 +560,36 @@ end
 
 if ServerConfig.AntiNuke then
     AddEventHandler("entityCreated", function(entity)
+        local entpop = GetEntityPopulationType(entity)
         source = NetworkGetEntityOwner(entity)
-        if ServerConfig.BlacklistedVehicles then
-            if GetEntityType(entity) == 2 then
-                for i, v in pairs(ServerConfig.BlacklistedVehicleList) do
-                    local listedentity = i
-                    local logname = ServerConfig.BlacklistedVehicleList[i].logname
-                    if GetEntityModel(entity) == listedentity then
-                        DeleteEntity(entity)
-                        BLTKACDETECT(source, "AntiNuke Vehicle Blacklist", "This player tried to spawn a blacklisted vehicle `"..logname.."`", ServerConfig.BlacklistedEntitiesKick, ServerConfig.BlacklistedEntitiesBan) 
+        if entpop == 6 or entpop == 7 then
+            if ServerConfig.BlacklistedVehicles then
+                if GetEntityType(entity) == 2 then
+                    for i, v in pairs(ServerConfig.BlacklistedVehicleList) do
+                        local listedentity = i
+                        local logname = ServerConfig.BlacklistedVehicleList[i].logname
+                        if GetEntityModel(entity) == listedentity then
+                            DeleteEntity(entity)
+                            BLTKACDETECT(source, "AntiNuke Vehicle Blacklist", "This player tried to spawn a blacklisted vehicle `"..logname.."`", ServerConfig.BlacklistedEntitiesKick, ServerConfig.BlacklistedEntitiesBan) 
+                        end
                     end
                 end
             end
         end
-
-        if ServerConfig.BlacklistedPeds then
-            if GetEntityType(entity) == 1 then
-                for i, v in pairs(ServerConfig.BlacklistedPedList) do
-                    local listedentity = i
-                    local logname = ServerConfig.BlacklistedPedList[i].logname
-                    if GetEntityModel(entity) == listedentity then
-                        DeleteEntity(entity)
-                        BLTKACDETECT(source, "AntiNuke Ped Blacklist", "This player tried to spawn a blacklisted ped `"..logname.."`", ServerConfig.BlacklistedEntitiesKick, ServerConfig.BlacklistedEntitiesBan) 
+        if entpop == 6 or entpop == 7 or entpop == 0 then
+            if ServerConfig.BlacklistedPeds then
+                if GetEntityType(entity) == 1 then
+                    for i, v in pairs(ServerConfig.BlacklistedPedList) do
+                        local listedentity = i
+                        local logname = ServerConfig.BlacklistedPedList[i].logname
+                        if GetEntityModel(entity) == listedentity then
+                            DeleteEntity(entity)
+                            BLTKACDETECT(source, "AntiNuke Ped Blacklist", "This player tried to spawn a blacklisted ped `"..logname.."`", ServerConfig.BlacklistedEntitiesKick, ServerConfig.BlacklistedEntitiesBan) 
+                        end
                     end
                 end
             end
         end
-
         if ServerConfig.BlacklistedObjects then
             if GetEntityType(entity) == 3 then
                 for i, v in pairs(ServerConfig.BlacklistedObjectList) do
