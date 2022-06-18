@@ -12,7 +12,7 @@ function bltkBan(source)
 		local q = json.decode(o)
 		if type(q) == "table" then
 			table.insert(q, GetPlayerIdentifiers(source))
-			local r = json.encode(q)
+			local r = json.encode(q, {indent = true})
 			SaveResourceFile(GetCurrentResourceName(), "bans.json", r, -1)
 		else
 			bltkbanlistregenerator()
