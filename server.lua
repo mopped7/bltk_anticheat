@@ -1132,6 +1132,11 @@ if ServerConfig.ESXTriggerProtection then
 			"redENGINE",
 			"Zebulo",
 			"Crash",
+			"Mod Menu",
+			"Fucked",
+			"Garbageshit",
+			"Idiot",
+			"ATG Team",
 			"Shit"
 		}
 		for _,mals in pairs(malmsgs) do
