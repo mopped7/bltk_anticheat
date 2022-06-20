@@ -3,11 +3,14 @@
 **An advanced free FiveM anticheat.**
 
 [TOCM]
-#Configuration
+
+# Configuration
+
 _Always be careful when you are configuring this anticheat. You will need to find out which functions are working correctly on your server. A good configuration can make difference. Bypass ACE permission: `bltk-ac.bypass`_
 
-#Detections
-###Client-side Anticheat features
+# Detections
+
+### Client-side Anticheat features
 
 - Anti God Mode
 - Max health system
@@ -37,11 +40,11 @@ _Always be careful when you are configuring this anticheat. You will need to fin
 - Anti Tiny ped
 - Ped bl
 
-###Server-side dev functions
+### Server-side dev functions
 
 - Debug Mode
 
-###Server-side AC features
+### Server-side AC features
 
 - Anti PCK Menu
 - Anti Scrambler Script
@@ -58,7 +61,8 @@ _Always be careful when you are configuring this anticheat. You will need to fin
 - Object/Vehicle/Ped blacklist
 - Anti Event spam
 
-#Updates? Contributing?
+# Updates? Contributing?
+
 _I will always update the anticheat, when I will find new solutions for blocking cheats. If you want to help, feel free to make a Pull Request!_
 
 [Fivemland](https://discord.gg/Zdaqj5EM5Z)
