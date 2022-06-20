@@ -776,6 +776,23 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 				end
 			end)
 		end
+		CreateThread(function()
+			while true do
+				Wait(500)
+				if ClientConfig.Blocks.AntiVehicleFly then
+					if IsPedInAnyVehicle(PlayerPedId()) then
+						if not IsPedInAnyHeli(PlayerPedId()) and not IsPedInAnyPlane(PlayerPedId()) then
+							local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+							local highground = GetEntityHeightAboveGround(PlayerPedId())
+							local eco = GetEntityCoords(PlayerPedId())
+							if highground > 30 then
+								SetEntityCoords(vehicle, eco.x, eco.y, eco.z - GetEntityHeightAboveGround(PlayerPedId()))
+							end
+						end
+					end
+				end
+			end
+		end)
 
 		if ClientConfig.DisableNUIDevtools then
 			RegisterNUICallback("devtoolOpening", function()
@@ -903,20 +920,3 @@ RegisterNetEvent("bltkac-admin:screenshot:requested", function(sslink)
 	end)
 end)
 
-CreateThread(function()
-	while true do
-		Wait(500)
-		if ClientConfig.Blocks.AntiVehicleFly then
-			if IsPedInAnyVehicle(PlayerPedId()) then
-				if not IsPedInAnyHeli(PlayerPedId()) and not IsPedInAnyPlane(PlayerPedId()) then
-					local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-					local highground = GetEntityHeightAboveGround(PlayerPedId())
-					local eco = GetEntityCoords(PlayerPedId())
-					if highground > 30 then
-						SetEntityCoords(vehicle, eco.x, eco.y, eco.z - GetEntityHeightAboveGround(PlayerPedId()))
-					end
-				end
-			end
-		end
-	end
-end)
