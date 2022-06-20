@@ -1,4 +1,4 @@
--- BLTK_ANTICHEAT V4
+-- BLTK_ANTICHEAT V5
 
 ClientConfig = {}
 -- [[READ THIS!]]
@@ -22,12 +22,10 @@ ClientConfig.BlackListWeaponList = { -- Blacklisted Weapons
 	"WEAPON_FIREWORK",
 }
 ClientConfig.NoNPC = false -- Turn this on, if you have a NoNPC server. This function will delete ALL UNKNOWN ped.
-ClientConfig.TxdMenu = true -- This will detect some textured mod menu.
+ClientConfig.TxdMenu = false -- This will detect some textured mod menu.
 ClientConfig.AntiSuperJump = true -- Blocks superjump functions
 ClientConfig.ThermalVision = true -- This will detect thermal vision if the player is not in any helicopter.
 ClientConfig.NightVision = true -- This will detect night vision.
-ClientConfig.RagdollDetection = true -- Detecting Anti-Ragdoll systems.
-ClientConfig.MenyooASI = false -- It can detect some ASI menu like Menyoo, be careful with this function, this function can cause false positives on some servers.
 ClientConfig.AntiFreeCam = true -- Anti Freecam system, that can be useful against entity spawner scripts.
 ClientConfig.FreecamLimit = 100 -- Freecam distance limit, 100 is a good starting point, but if you get false bans with this, you should increase this number
 ClientConfig.MaxArmor = 100 -- Max armor (usually 100)
@@ -36,9 +34,9 @@ ClientConfig.SpeedHack = true -- It may not work correctly on some servers.
 ClientConfig.AntiExplosiveBullets = true -- Blocks explosive bullets
 ClientConfig.Noclip = true -- AntiNoclip, this may not work correctly on some servers, test it out yourself.
 ClientConfig.Teleport = true -- Blocks teleport/noclip methods, detects abnormal position changes
-ClientConfig.TeleportDistance = 75 -- Teleport distance, 50 is a good starting point
+ClientConfig.TeleportDistance = 50 -- Teleport distance, 50 is a good starting point
 ClientConfig.AntiWeaponDamageChanger = true -- AntiWeaponDamageModifier, please note that this can fuck up with some servers.
-ClientConfig.Styles = true -- I would recommend you to turn this on, this will catch a few mod menus.
+ClientConfig.Styles = false -- I would recommend you to turn this on, this will catch a few mod menus.
 ClientConfig.AntiVehicleCheats = false -- Blocks vehicle modifiers
 ClientConfig.AntiAFKBypass = true -- Detects if someone is trying to bypass Anti AFK systems.
 
@@ -50,13 +48,12 @@ ClientConfig.ResourceLookup = true -- This will lookup client resources, and can
 ClientConfig.CommandChecker = true -- This will catch new client sided commands, that can be really useful, if someone wants to inject a menu with commands.
 ClientConfig.ResourceChecker = false -- This will check the number of resources.
 ClientConfig.AntiResourceRestart = false -- (Really useful) Can detect some executors. DON'T STOP RESTART OR START SCRIPTS IF YOU ENABLED THIS.
-ClientConfig.DisableNUIDevtools = false -- This function will disable nui_devtools.
 ClientConfig.AntiResourceStopper = true -- Detects if a cheater is trying to stop client-side of OTHER resources.
 ClientConfig.ResNameCheck = false -- E***n checker, make sure your resource names does not contains more than 17 character.
 ClientConfig.AntiUnisolatedResInjection = true -- Rally useful, but on heavily loaded servers it can be laggy, don't use if you have more than 80 players.
 ClientConfig.EMD = true -- Enhanced Menu Detection. One of the most advanced anti injection systems. Use bltkemd to install and bltkemdun to uninstall EMD.
 
-ClientConfig.AI = true -- Screen analyzer AI (REQUIRES SCREENSHOT-BASIC)
+ClientConfig.AI = false -- Screen analyzer AI (REQUIRES SCREENSHOT-BASIC)
 ClientConfig.OnButtons = true -- Checks screen on DELETE & INSERT button
 
 ClientConfig.PedChecks = true -- This will check ped manipulations.
@@ -84,3 +81,7 @@ ClientConfig.ClientTriggerList = {
 	"esx_status:set",
 	"UnJP",
 }
+
+ClientConfig.AntiSpawn = true -- Blocks entity spawns (very useful) anti vehicle, ped, prop spawn.
+ClientConfig.AntiSpawnKick = true
+ClientConfig.AntiSpawnBan = true

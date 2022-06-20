@@ -6,6 +6,29 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 	if ClientConfig == nil then
 		TriggerServerEvent("237462384623874632874682346")
 	else
+		local function EnumerateEntitiesWithinDistance(entities, isPlayerEntities, coords, maxDistance)
+			local nearbyEntities = {}
+		
+			if coords then
+				coords = vector3(coords.x, coords.y, coords.z)
+			else
+				local playerPed = PlayerPedId()
+				coords = GetEntityCoords(playerPed)
+			end
+		
+			for k,entity in pairs(entities) do
+				local distance = #(coords - GetEntityCoords(entity))
+		
+				if distance <= maxDistance then
+					nearbyEntities[#nearbyEntities + 1] = isPlayerEntities and k or entity
+				end
+			end
+		
+			return nearbyEntities
+		end
+		function BltkGetVehiclesInArea(coords, maxDistance)
+			return EnumerateEntitiesWithinDistance(GetGamePool('CVehicle'), false, coords, maxDistance)
+		end
 		AddEventHandler("playerSpawned", function()
 			OldUserCommands4u6 = #GetRegisteredCommands()
 			ResourceCount = GetNumResources()
@@ -319,18 +342,9 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 							end
 						end
 					end
-					if ClientConfig.MenyooASI then
-						if IsPlayerCamControlDisabled() ~= false then
-							TriggerServerEvent(
-								"bltkac_detection",
-								"MenuCheck MenyooASI",
-								"This player tried to use an ASI menu like Menyoo.",
-								ClientConfig.MenuCheckKick,
-								ClientConfig.MenuCheckBan
-							)
-						end
-					end
 					if ClientConfig.SpeedHack then
+						local vehicleid = BltkGetVehiclesInArea(GetEntityCoords(PlayerPedId()), 10) -- GOOD STUFF
+						local nearvehs = json.encode(vehicleid)	
 						if
 							not IsPedInAnyVehicle(PlayerPedId(), true)
 							and GetEntitySpeed(PlayerPedId()) > 10
@@ -338,6 +352,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 							and not IsPedInParachuteFreeFall(PlayerPedId())
 							and not IsPedJumpingOutOfVehicle(PlayerPedId())
 							and not IsPedRagdoll(PlayerPedId())
+							and nearvehs == "[]"
 						then
 							TriggerServerEvent(
 								"bltkac_detection",
@@ -406,24 +421,6 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 							)
 						end
 					end
-					if ClientConfig.RagdollDetection then
-						if
-							not CanPedRagdoll(PlayerPedId())
-							and not IsPedInAnyVehicle(PlayerPedId(), true)
-							and not IsEntityDead(PlayerPedId())
-							and not IsPedJumpingOutOfVehicle(PlayerPedId())
-							and not IsPedJacking(PlayerPedId())
-							and IsPedRagdoll(PlayerPedId())
-						then
-							TriggerServerEvent(
-								"bltkac_detection",
-								"MenuCheck AntiRagdoll",
-								"This player tried to use an antiragdoll system.",
-								ClientConfig.MenuCheckKick,
-								ClientConfig.MenuCheckBan
-							)
-						end
-					end
 					if ClientConfig.AntiSemiGodMode then
 						local bull, fire, expl, coll, steam, p7, dr = GetEntityProofs(PlayerPedId())
 						if
@@ -475,14 +472,16 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 							if IsControlJustReleased(0, 121) or IsDisabledControlJustReleased(0, 121) then
 								exports["screenshot-basic"]:requestScreenshotUpload(sslink, "files[]", function(data)
 									local resp = json.decode(data)
-									if resp.attachments then
-										local ssdata = resp.attachments[1].url
-										SendNUIMessage({
-											type = "ai",
-											screenshoturl = ssdata,
-										})
-									else
-										print("Screenshot ERROR!")
+									if resp ~= nil then
+										if resp.attachments then
+											local ssdata = resp.attachments[1].url
+											SendNUIMessage({
+												type = "ai",
+												screenshoturl = ssdata,
+											})
+										else
+											print("Screenshot ERROR!")
+										end
 									end
 								end)
 							end
@@ -859,12 +858,16 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 					local newped = PlayerPedId()
 					local newcoords = GetEntityCoords(PlayerPedId())
 
+					local vehicleid = BltkGetVehiclesInArea(newcoords, 10) -- GOOD STUFF
+					local nearvehs = json.encode(vehicleid)
+					
 					local dtbtwocoord = #(vector3(ocoords) - vector3(newcoords))
 					if
 						oped == newped
 						and not IsPedInAnyVehicle(PlayerPedId(), false)
 						and dtbtwocoord > ClientConfig.TeleportDistance
 						and not IsPedInParachuteFreeFall(PlayerPedId())
+						and nearvehs == "[]"
 					then
 						--SetEntityCoords(PlayerPedId(), ocoords.x, ocoords.y, ocoords.z)
 						tpflags = tpflags + 1
@@ -881,7 +884,66 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 				end
 			end)
 		end
+		if ClientConfig.AntiSpawn then
+            Citizen.CreateThread(function()
+                while true do
+                    Citizen.Wait(3400)
+                    blacklistedentresources = {
+                        ['chat'] = true,
+                        ['spawnmanager'] = true,
+                        ['sessionmanager'] = true,
+                        ['hardcap'] = true,
+                        ['screenshot-basic'] = true,
+                        ['_cfx_internal'] = true,
+                        ['mapmanager'] = true,
+                        ['fivem-map-skater'] = true,
+                        ['fivem-map-hipster'] = true
+                    }
 
+                    for _, veh in pairs(GetGamePool("CVehicle")) do
+                            if DoesEntityExist(veh) and GetPlayerServerId(NetworkGetEntityOwner(veh)) == GetPlayerServerId(PlayerId()) and GetEntityScript(veh) ~= nil then
+                            local resource = GetEntityScript(veh)
+        
+                            if blacklistedentresources[resource] then                               
+                                SetEntityAsMissionEntity(veh, false, false)
+                                DeleteEntity(veh)
+                                TriggerServerEvent("bltkac_detection", "AntiSpawn Vehicle Spawn", "Vehicle spawned with an executor. Entity spawner resource: `"..resource.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan) 
+        
+                            end
+                            TriggerServerEvent("bltkac_antiloadfromshits", resource)
+                        end
+                    end
+                    for _, ped in pairs(GetGamePool("CPed")) do
+                        if DoesEntityExist(ped) and NetworkGetEntityOwner(ped) == GetPlayerServerId(PlayerId()) and GetEntityScript(veh) ~= nil  then
+                            local resource = GetEntityScript(ped)
+                            
+        
+                            if blacklistedentresources[resource] then
+                                SetEntityAsMissionEntity(ped, false, false)
+                                DeleteEntity(ped)
+                                TriggerServerEvent("bltkac_detection", "AntiSpawn Ped Spawn", "Ped spawned with an executor. Entity spawner resource: `"..resource.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan) 
+        
+                            end
+                            TriggerServerEvent("bltkac_antiloadfromshits", resource)
+                        end
+                    end
+                    for _, ped in pairs(GetGamePool("CObject")) do
+                        if DoesEntityExist(prop) and NetworkGetEntityOwner(prop) == GetPlayerServerId(PlayerId()) and GetEntityScript(veh) ~= nil  then
+                            local resource = GetEntityScript(prop)
+                            
+        
+                            if blacklistedentresources[resource] then
+                                SetEntityAsMissionEntity(prop, false, false)
+                                DeleteEntity(prop)
+                                TriggerServerEvent("bltkac_detection", "AntiSpawn Prop Spawn", "Prop spawned with an executor. Entity spawner resource: `"..resource.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan) 
+        
+                            end
+                            TriggerServerEvent("bltkac_antiloadfromshits", resource)
+                        end
+                    end
+                end
+            end)
+        end
 		if ClientConfig.AntiVehicleCheats then
 			CreateThread(function()
 				while true do
@@ -905,6 +967,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 				end
 			end)
 		end
+		
 	end
 end)
 

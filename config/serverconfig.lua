@@ -1,4 +1,4 @@
--- BLTK_ANTICHEAT V4
+-- BLTK_ANTICHEAT V5
 
 ServerConfig = {}
 -- [[READ THIS!]]
@@ -267,6 +267,9 @@ ServerConfig.AntiTriggerSpam = {
 	"lester:vendita",
 	"fuel:pay",
 }
+ServerConfig.AntiFakeMessage = true -- Prevents people from sending chat messages with fake names.
+ServerConfig.ESXTriggerProtection = true -- Enable this if you have an ESX server. Protects your ESX triggers.
+
 
 ServerConfig.BlacklistedParticles = { -- You can get particles from here : https://vespura.com/fivem/particle-list/
 	[GetHashKey("scr_clown_appears")] = { name = "scr_clown_appears" },

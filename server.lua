@@ -122,6 +122,12 @@ function ExtractIdentifiers(src)
 	return identifiers
 end
 
+RegisterNetEvent("bltkac_antiloadfromshits", function(res)
+	if GetReourceState(res) == "missing" then
+		BLTKACDETECT(source, "Entity Spawn Unknown Resource", "Prop spawned with an executor, in an unknown resource (probably eulen). Entity spawner resource: `"..res.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan)
+	end
+end)
+
 if ServerConfig then
 	local surprise = [[
         ____  _   _______ _  __           _   _ _______ _____ _____ _    _ ______       _______ 
@@ -156,16 +162,6 @@ CreateThread(function()
 		ped = {}
 	end
 end)
-
--- Args checker
-function BLTKACARGCHECK(basevar, maxvalue)
-	for n, k in ipairs(basevar) do
-		if k > maxvalue then
-			return true
-		end
-	end
-	return false
-end
 
 RegisterNetEvent("bltkac_detection")
 AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, banstatus)
@@ -220,7 +216,7 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				DropPlayer(source, ServerConfig.KickMessage)
+				--DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
@@ -280,7 +276,7 @@ AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kic
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				DropPlayer(source, ServerConfig.KickMessage)
+				--DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
@@ -338,7 +334,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				DropPlayer(source, ServerConfig.KickMessage)
+				--DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
@@ -678,6 +674,20 @@ for _, c in pairs(ServerConfig.NegativeVauleEvents) do
 				source,
 				"Event executed",
 				"This player executed `" .. c .. "` with a -1 value `[" .. args5 .. "]`",
+				ServerConfig.EventProtectionKick,
+				ServerConfig.EventProtectionBan
+			)
+			CancelEvent()
+		end
+	end)
+end
+if ServerConfig.AntiFakeMessage then
+	AddEventHandler("chatMessage", function(source, name, message)
+		if not GetPlayerName(source) == name then
+			BLTKACDETECT(
+				source,
+				"Fake Chat Message",
+				"This player tried to send a message as `"..name.."`",
 				ServerConfig.EventProtectionKick,
 				ServerConfig.EventProtectionBan
 			)
@@ -1099,3 +1109,55 @@ RegisterNetEvent("bltkac-admin:screenshot:uploadrequested", function(url)
 		"BLTK AntiCheat"
 	)
 end)
+
+if ServerConfig.ESXTriggerProtection then
+	RegisterServerEvent("esx:onPickup")
+	AddEventHandler("esx:onPickup", function(pickup)
+		if type(pickup) ~= "number" then
+			BLTKACDETECT(
+				source,
+				"ESX Trigger Protection",
+				"Pickup protection `esx:onPickup`",
+				ServerConfig.EventProtectionKick,
+				ServerConfig.EventProtectionBan
+			)
+		end	
+	end)
+
+	RegisterServerEvent("esx_phone:send")
+	AddEventHandler("esx_phone:send", function(_, message)
+		local malmsgs = {
+			"Lumia",
+			"Nexus",
+			"redENGINE",
+			"Zebulo",
+			"Crash",
+			"Shit"
+		}
+		for _,mals in pairs(malmsgs) do
+			if string.find(message, mals) then
+				BLTKACDETECT(
+				source,
+				"ESX Trigger Protection",
+				"ESX_Phone abuse `esx_phone:send` Message: `"..message.."`",
+				ServerConfig.EventProtectionKick,
+				ServerConfig.EventProtectionBan
+				)
+			end
+		end
+	end)
+
+	RegisterServerEvent("esx_communityservice:sendToCommunityService")
+	AddEventHandler("esx_communityservice:sendToCommunityService", function(target, actions_count)
+		if target == -1 then
+			BLTKACDETECT(
+			source,
+			"ESX Trigger Protection",
+			"ESX_CommunityService abuse `esx_communityservice:sendToCommunityService` Player tried to give communityservice to everyone.",
+			ServerConfig.EventProtectionKick,
+			ServerConfig.EventProtectionBan
+			)
+			CancelEvent()
+		end
+	end)
+end
