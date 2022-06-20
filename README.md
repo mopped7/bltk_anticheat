@@ -2,7 +2,7 @@
 
 **An advanced free FiveM anticheat.**
 
-[TOCM]
+
 
 # Configuration
 
