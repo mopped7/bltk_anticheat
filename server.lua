@@ -1073,7 +1073,7 @@ RegisterCommand("bltk-unban", function(source, args, rawCommand)
 	end
 end, false)
 
-RegisterCommand("bltkac-admin", function(source, args, rawCommand)
+RegisterCommand("bltk-admin", function(source, args, rawCommand)
 	if IsPlayerAceAllowed(source, "bltk-ac.admin") then
 		if args[1] == "screenshot" then
 			if args[2] == nil then
