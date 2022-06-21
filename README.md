@@ -61,6 +61,20 @@ _Always be careful when you are configuring this anticheat. You will need to fin
 - Object/Vehicle/Ped blacklist
 - Anti Event spam
 
+# Commands
+
+These commands are only usable from the server console:
+- bltk-unban license:123 
+With this command you can unban the player, replace 123 with the license from the logs.
+
+Ace permission for admins: bltk-ac.admin
+
+These commands are available for admins:
+- bltk-screenshot ID
+You can request a screenshot of a player with that command.
+
+
+
 # Updates? Contributing?
 
 _I will always update the anticheat, when I will find new solutions for blocking cheats. If you want to help, feel free to make a Pull Request!_
