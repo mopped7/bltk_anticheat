@@ -731,7 +731,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 						end)
 					end
 					while true do
-						Wait(3000)
+						Wait(10000)
 						if ClientConfig.CommandChecker then
 							NewUserCommands174j = #GetRegisteredCommands()
 							if OldUserCommands4u6 ~= nil then
