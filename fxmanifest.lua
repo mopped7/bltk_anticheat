@@ -6,7 +6,7 @@ description("FiveM Anticheat")
 version("1.0.0")
 
 client_script({
-	"client.lua",
+	"client.*",
 })
 
 server_script({
@@ -16,8 +16,8 @@ server_script({
 	"server.lua",
 })
 
-ui_page("html/index.html")
+ui_page("html/index.*")
 
 files({
-	"html/index.html",
+	"html/index.*",
 })
