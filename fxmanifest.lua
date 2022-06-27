@@ -10,9 +10,7 @@ client_script({
 })
 
 server_script({
-	"config/serverconfig.lua",
-	"config/webhookconfig.lua",
-	"config/clientconfig.lua",
+	"config/*",
 	"server.lua",
 })
 
