@@ -900,6 +900,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
                         ['_cfx_internal'] = true,
                         ['mapmanager'] = true,
                         ['fivem-map-skater'] = true,
+			['scr_2'] = true,
                         ['fivem-map-hipster'] = true
                     }
 
