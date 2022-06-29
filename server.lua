@@ -216,7 +216,7 @@ AddEventHandler("bltkac_detection", function(mreason, description, kickstatus, b
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				--DropPlayer(source, ServerConfig.KickMessage)
+				DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
@@ -276,7 +276,7 @@ AddEventHandler("bltkac_detection_ai", function(ssurl, mreason, description, kic
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				--DropPlayer(source, ServerConfig.KickMessage)
+				DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
@@ -334,7 +334,7 @@ function BLTKACDETECT(source, mreason, description, kickstatus, banstatus)
 				"BLTK AntiCheat"
 			)
 			if kickstatus then
-				--DropPlayer(source, ServerConfig.KickMessage)
+				DropPlayer(source, ServerConfig.KickMessage)
 			end
 		end
 	end
