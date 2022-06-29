@@ -643,7 +643,7 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
 					"www.Jynxmenu.com",
 					-- Alikhan
 					"Alikhan",
-					"Alikhancheats.com,
+					"Alikhancheats.com",
 				}
 				for _, word in pairs(badwords) do
 					if string.find(string.lower(data.text), string.lower(word)) then
