@@ -918,27 +918,27 @@ RegisterNetEvent("loadfullclient_68347623", function(config)
                         end
                     end
                     for _, ped in pairs(GetGamePool("CPed")) do
-                        if DoesEntityExist(ped) and NetworkGetEntityOwner(ped) == GetPlayerServerId(PlayerId()) and GetEntityScript(veh) ~= nil  then
-                            local resource = GetEntityScript(ped)
-                            
-        
-                            if blacklistedentresources[resource] then
-                                SetEntityAsMissionEntity(ped, false, false)
-                                DeleteEntity(ped)
+           		 if DoesEntityExist(ped) and NetworkGetEntityOwner(ped) == GetPlayerServerId(PlayerId()) and GetEntityScript(ped) ~= nil  then
+               		 local resource = GetEntityScript(ped)
+                
+
+               	 if blacklistedentresources[resource] then
+                    SetEntityAsMissionEntity(ped, false, false)
+                    DeleteEntity(ped)
                                 TriggerServerEvent("bltkac_detection", "AntiSpawn Ped Spawn", "Ped spawned with an executor. Entity spawner resource: `"..resource.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan) 
         
                             end
                             TriggerServerEvent("bltkac_antiloadfromshits", resource)
                         end
                     end
-                    for _, ped in pairs(GetGamePool("CObject")) do
-                        if DoesEntityExist(prop) and NetworkGetEntityOwner(prop) == GetPlayerServerId(PlayerId()) and GetEntityScript(veh) ~= nil  then
-                            local resource = GetEntityScript(prop)
-                            
-        
-                            if blacklistedentresources[resource] then
-                                SetEntityAsMissionEntity(prop, false, false)
-                                DeleteEntity(prop)
+       		 for _, objjj in pairs(GetGamePool("CObject")) do
+          	  if DoesEntityExist(objjj) and NetworkGetEntityOwner(objjj) == GetPlayerServerId(PlayerId()) and GetEntityScript(objjj) ~= nil  then
+             	   local resource = GetEntityScript(objjj)
+                
+
+               	 if blacklistedentresources[resource] then
+			    SetEntityAsMissionEntity(objjj, false, false)
+                  	  DeleteEntity(objjj)
                                 TriggerServerEvent("bltkac_detection", "AntiSpawn Prop Spawn", "Prop spawned with an executor. Entity spawner resource: `"..resource.."`", ClientConfig.AntiSpawnKick, ClientConfig.AntiSpawnBan) 
         
                             end
